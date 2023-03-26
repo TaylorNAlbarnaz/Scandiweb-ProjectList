@@ -1,7 +1,7 @@
 import './Header.css';
 
 function Header() {
-return (
+  return (
     <header>
       <div>
         <h2>Product List</h2>
