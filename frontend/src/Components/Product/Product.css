@@ -11,6 +11,10 @@
   transition: .3s;
 }
 
+.selected {
+  opacity: 0.6;
+}
+
 .product:hover {
   cursor: pointer;
   transform: scale(1.05);

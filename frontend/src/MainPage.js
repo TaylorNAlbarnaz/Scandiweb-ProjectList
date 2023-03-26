@@ -1,6 +1,6 @@
 import { Header, ProductList } from './Components';
 
-function App() {
+function MainPage() {
   return (
     <div className='container'>
       <Header/>
@@ -9,4 +9,4 @@ function App() {
   );
 }
 
-export default App;
+export default MainPage;
