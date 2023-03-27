@@ -9,9 +9,9 @@ function Header(props) {
       </div>
 
       {props.AddProduct ? 
-        <ButtonsAddProduct onDelete={() => props.onDelete()}/>
+        <ButtonsAddProduct/>
       :
-        <ButtonsMain onDelete={() => props.onDelete()}/>
+        <ButtonsMain/>
       }
     </header>
   );

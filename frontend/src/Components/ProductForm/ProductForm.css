@@ -1,0 +1,21 @@
+#product_form {
+  padding-top: 20px;
+  width: 80%;
+}
+
+#product_form > div {
+  padding-bottom: 15px;
+}
+
+#product_form label {
+  width: 140px;
+}
+
+.description + div{
+  margin-top: 10px!important;
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+}
