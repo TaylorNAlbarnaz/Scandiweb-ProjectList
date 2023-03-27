@@ -1,7 +1,7 @@
 import './Header.css';
 import { Link } from 'react-router-dom';
 
-function Header() {
+function Header(props) {
   return (
     <header>
       <div>
@@ -15,7 +15,8 @@ function Header() {
           </button>
         </Link>
 
-        <button className="btn btn-primary" id="delete-product-btn">
+        <button className="btn btn-primary" id="delete-product-btn"
+          onClick={() => props.onDelete()}>
           Mass Delete
         </button>
       </div>
