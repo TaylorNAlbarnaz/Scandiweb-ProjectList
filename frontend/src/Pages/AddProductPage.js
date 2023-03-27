@@ -1,7 +1,9 @@
+import { Header } from "../Components/";
+
 function AddProductPage() {
   return (
     <div className='container'>
-      Add Product
+      <Header AddProduct/>
     </div>
   );
 }
