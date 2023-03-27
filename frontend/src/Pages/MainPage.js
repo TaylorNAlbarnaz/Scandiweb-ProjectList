@@ -1,4 +1,4 @@
-import { Header, ProductList } from './Components';
+import { Header, ProductList } from '../Components';
 
 function MainPage() {
   return (

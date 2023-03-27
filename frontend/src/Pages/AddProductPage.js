@@ -1,4 +1,4 @@
-function NewProductPage() {
+function AddProductPage() {
   return (
     <div className='container'>
       Add Product
@@ -6,4 +6,4 @@ function NewProductPage() {
   );
 }
 
-export default NewProductPage;
+export default AddProductPage;
