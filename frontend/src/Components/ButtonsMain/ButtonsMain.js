@@ -9,7 +9,7 @@ function ButtonsMain(props) {
           </button>
         </Link>
 
-        <button className='btn btn-danger' id='delete-product-btn'>
+        <button className='btn btn-danger' id='delete-product-btn' onClick={props.onDelete}>
           Mass Delete
         </button>
       </div>

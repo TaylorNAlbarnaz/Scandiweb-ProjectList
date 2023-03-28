@@ -1,22 +1,39 @@
 import { useState, useEffect } from 'react';
 
 import './ProductList.css';
-import { Product } from '../';
+import { ProductSingle } from '../';
 
-function ProductList() {
-  const [products, setProducts] = useState([{sku: "JVC200123", name: "Acme Disc",
-    price: "1.00", size: "700 MB"}]);
+import Product from '../../Models/Product';
+
+function ProductList(props) {
+  const [products, setProducts] = useState([]);
+  const productsToDelete = [];
 
   function getSampleProducts() {
-    const product = {};
-    product.sku = "JVC200123";
-    product.name = "Acme Disc";
-    product.price = "1.00";
-    product.size = "700 MB";
+    const productList = [];
 
-    let productList = new Array(20).fill(product);
-    console.log(productList);
+    // Generates 20 sample products
+    for (let i = 0; i < 20; i++) {
+      const product = new Product("JVC200123", "Acme Disc", "1.00", "700 MB");
+      product.name += i;
+      productList.push(product);
+    }
+
     setProducts(productList);
+  }
+
+  function updateProductsToDelete(product) {
+    var index = productsToDelete.indexOf(product);
+
+    // If already in the list, remove it, if not, add it
+    if (index !== -1) {
+      productsToDelete.splice(index, 1);
+    } else {
+      productsToDelete.push(product);
+    }
+
+    // Update parent's reference to the list
+    props.deleteRef.current = productsToDelete;
   }
 
   useEffect(() => {
@@ -26,12 +43,13 @@ function ProductList() {
   return (
     <section className='product-list'>
       {products.map((product, id)=>{
-         return <Product
+         return <ProductSingle
                   key={id}
                   sku={product.sku}
                   name={product.name}
                   price={product.price}
                   size={product.size}
+                  onSelect={() => updateProductsToDelete(product)}
                 />
       })}
     </section>

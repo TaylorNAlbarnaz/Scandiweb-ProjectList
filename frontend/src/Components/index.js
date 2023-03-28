@@ -1,6 +1,6 @@
 // Components
 export {default as Header} from './Header/Header.js';
-export {default as Product} from './Product/Product.js';
+export {default as ProductSingle} from './ProductSingle/ProductSingle.js';
 export {default as ProductForm} from './ProductForm/ProductForm.js';
 export {default as ProductList} from './ProductList/ProductList.js';
 

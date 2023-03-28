@@ -11,7 +11,7 @@ function Header(props) {
       {props.AddProduct ? 
         <ButtonsAddProduct/>
       :
-        <ButtonsMain/>
+        <ButtonsMain onDelete={props.onDelete}/>
       }
     </header>
   );

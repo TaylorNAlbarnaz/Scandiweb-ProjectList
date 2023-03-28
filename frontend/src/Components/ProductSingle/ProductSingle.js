@@ -1,11 +1,16 @@
 import { useState } from 'react';
-import './Product.css';
+import './ProductSingle.css';
 
-function Product(props) {
+function ProductSingle(props) {
   const [selected, setSelected] = useState(false);
 
+  function selectProduct() {
+    setSelected(!selected);
+    props.onSelect();
+  }
+
   return (
-    <div className={selected ? 'product selected' : 'product'} onClick={() => setSelected(!selected)}>
+    <div className={selected ? 'product selected' : 'product'} onClick={() => selectProduct()}>
       <div className='delete-checkbox'> { selected && 'X'} </div>
 
       <div className='product-details'>
@@ -18,4 +23,4 @@ function Product(props) {
   );
 }
 
-export default Product;
+export default ProductSingle;
