@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './Product.css';
 
-function Product() {
+function Product(props) {
   const [selected, setSelected] = useState(false);
 
   return (
@@ -9,10 +9,10 @@ function Product() {
       <div className='delete-checkbox'> { selected && 'X'} </div>
 
       <div className='product-details'>
-        <span>JVC200123</span>
-        <span>Acme Disc</span>
-        <span>1.00 $</span>
-        <span>Size: 700 MB</span>
+        <span>{props.sku}</span>
+        <span>{props.name}</span>
+        <span>{props.price} $</span>
+        <span>Size: {props.size}</span>
       </div>
     </div>
   );
