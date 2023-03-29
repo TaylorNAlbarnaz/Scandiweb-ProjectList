@@ -1,8 +1,7 @@
 export default class Product {
-  constructor(sku, name, price, size) {
+  constructor(sku, name, price) {
     this.sku = sku;
     this.name = name;
     this.price = price;
-    this.size = size;
   }
 }

@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import './ProductSingle.css';
 
-function ProductSingle(props) {
+function ProductSingle({ product, type, onSelect }) {
   const [selected, setSelected] = useState(false);
 
   function selectProduct() {
     setSelected(!selected);
-    props.onSelect();
+    onSelect();
   }
 
   return (
@@ -14,10 +14,24 @@ function ProductSingle(props) {
       <div className='delete-checkbox'> { selected && 'X'} </div>
 
       <div className='product-details'>
-        <span>{props.sku}</span>
-        <span>{props.name}</span>
-        <span>{props.price} $</span>
-        <span>Size: {props.size}</span>
+        <span>{product.sku}</span>
+        <span>{product.name}</span>
+        <span>{product.price} $</span>
+
+        {/*DVD*/}
+        {type == 1 &&
+          <span>Size: {product.size}</span>
+        }
+
+        {/*Furniture*/}
+        {type == 2 &&
+          <span>Dimensions: {product.height}x{product.width}x{product.length}</span>
+        }
+
+        {/*Book*/}
+        {type == 3 &&
+          <span>Weight: {product.weight}</span>
+        }
       </div>
     </div>
   );

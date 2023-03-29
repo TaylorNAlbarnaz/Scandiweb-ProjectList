@@ -4,7 +4,7 @@ import './ProductList.css';
 import { ProductSingle } from '../';
 import { ProductsContext } from '../../Pages/MainPage';
 
-import Product from '../../Models/Product';
+import { Book, DVD, Furniture } from '../../Models/';
 
 function ProductList() {
   const [products, setProducts, productsToDelete, setProductsToDelete] = useContext(ProductsContext);
@@ -12,10 +12,27 @@ function ProductList() {
   function getSampleProducts() {
     const productList = [];
 
-    // Generates 20 sample products
-    for (let i = 0; i < 20; i++) {
-      const product = new Product("JVC200123", "Acme Disc", "1.00", "700 MB");
+    // Generates 4 sample DVDs
+    for (let i = 0; i < 4; i++) {
+      const product = new DVD("JVC200123", "Acme Disc", "1.00", "700 MB");
       product.name += i;
+      product.type = 1;
+      productList.push(product);
+    }
+
+    // Generates 4 sample Furnitures
+    for (let i = 0; i < 4; i++) {
+      const product = new Furniture("FNU200123", "Acme Disc Player", "1.00", "100", "200", "300");
+      product.name += i;
+      product.type = 2;
+      productList.push(product);
+    }
+
+    // Generates 4 sample Books
+    for (let i = 0; i < 4; i++) {
+      const product = new Book("BKK200123", "Acme Book", "1.00", "6KG");
+      product.name += i;
+      product.type = 3;
       productList.push(product);
     }
 
@@ -45,11 +62,8 @@ function ProductList() {
       {products.map((product)=>{
          return <ProductSingle
                   key={product.name}
-                  sku={product.sku}
-                  name={product.name}
-                  price={product.price}
-                  size={product.size}
                   product={product}
+                  type={product.type}
                   onSelect={() => updateProductsToDelete(product)}
                 />
       })}
