@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 
 import './ProductList.css';
 import { ProductSingle } from '../';
+import { ProductsContext } from '../../Pages/MainPage';
 
 import Product from '../../Models/Product';
 
-function ProductList(props) {
-  const [products, setProducts] = useState([]);
-  const productsToDelete = [];
+function ProductList() {
+  const [products, setProducts, productsToDelete, setProductsToDelete] = useContext(ProductsContext);
 
   function getSampleProducts() {
     const productList = [];
@@ -33,7 +33,7 @@ function ProductList(props) {
     }
 
     // Update parent's reference to the list
-    props.deleteRef.current = productsToDelete;
+    setProductsToDelete(productsToDelete);
   }
 
   useEffect(() => {
@@ -42,13 +42,14 @@ function ProductList(props) {
 
   return (
     <section className='product-list'>
-      {products.map((product, id)=>{
+      {products.map((product)=>{
          return <ProductSingle
-                  key={id}
+                  key={product.name}
                   sku={product.sku}
                   name={product.name}
                   price={product.price}
                   size={product.size}
+                  product={product}
                   onSelect={() => updateProductsToDelete(product)}
                 />
       })}

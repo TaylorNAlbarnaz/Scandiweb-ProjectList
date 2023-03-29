@@ -1,18 +1,26 @@
-import { useRef } from 'react';
+import { useState, createContext } from 'react';
 import { Header, ProductList} from '../Components';
 
+export const ProductsContext = createContext();
+
 function MainPage() {
-  const productsToDelete = useRef([]);
+  let [products, setProducts] = useState([]);
+  let [productsToDelete, setProductsToDelete] = useState([]);
 
   function massDelete() {
-    console.log("Products Deleted", productsToDelete);
+    // Filters only products that aren't part of productsToDelete
+    products = products.filter(p => productsToDelete.indexOf(p) == -1);
+    setProducts(products);
+    setProductsToDelete([]);
   }
 
   return (
-    <div className='container'>
-      <Header onDelete={() => massDelete()}/>
-      <ProductList deleteRef={productsToDelete}/>
-    </div>
+    <ProductsContext.Provider value={[products, setProducts, productsToDelete ,setProductsToDelete]}>
+      <div className='container'>
+        <Header onDelete={() => massDelete()}/>
+        <ProductList/>
+      </div>
+    </ProductsContext.Provider>
   );
 }
 

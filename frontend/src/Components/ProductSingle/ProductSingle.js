@@ -10,7 +10,7 @@ function ProductSingle(props) {
   }
 
   return (
-    <div className={selected ? 'product selected' : 'product'} onClick={() => selectProduct()}>
+    <div className={ selected ? 'product selected' : 'product' } onClick={() => selectProduct()}>
       <div className='delete-checkbox'> { selected && 'X'} </div>
 
       <div className='product-details'>
