@@ -5,12 +5,12 @@ function ButtonsMain(props) {
       <div className='buttons'>
         <Link to='/add-product'>
           <button className='btn btn-primary' id='add-product-btn'>
-            Add
+            ADD
           </button>
         </Link>
 
         <button className='btn btn-danger' id='delete-product-btn' onClick={props.onDelete}>
-          Mass Delete
+          MASS DELETE
         </button>
       </div>
   );
