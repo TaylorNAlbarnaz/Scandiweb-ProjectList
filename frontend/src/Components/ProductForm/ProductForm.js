@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Book, DVD, Furniture } from '../../Models';
 import './ProductForm.css';
 
+import { ProductsContext } from '../../App';
+
 function ProductForm() {
+  const [products, setProducts] = useContext(ProductsContext);
   const [type, setType] = useState(1);
   const [error, setError] = useState(false);
   const navigate = useNavigate();
@@ -16,7 +19,6 @@ function ProductForm() {
     e.preventDefault();
 
     createProduct();
-    console.log("Produto criado");
   }
 
   function createProduct() {
@@ -54,7 +56,8 @@ function ProductForm() {
     }
     
     // Posts the object and goes back to main page
-    console.log(newProduct);
+    products.push(newProduct)
+    setProducts(products);
     navigate('/');
   }
 

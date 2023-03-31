@@ -1,11 +1,10 @@
-import { useState, createContext } from 'react';
+import { useState, createContext, useContext } from 'react';
 import { Header, ProductList} from '../Components';
 
-export const ProductsContext = createContext();
+import { ProductsContext } from '../App';
 
 function MainPage() {
-  let [products, setProducts] = useState([]);
-  let [productsToDelete, setProductsToDelete] = useState([]);
+  let [products, setProducts, productsToDelete, setProductsToDelete] = useContext(ProductsContext);
 
   function massDelete() {
     // Filters only products that aren't part of productsToDelete
@@ -15,12 +14,10 @@ function MainPage() {
   }
 
   return (
-    <ProductsContext.Provider value={[products, setProducts, productsToDelete ,setProductsToDelete]}>
-      <div className='container'>
-        <Header onDelete={() => massDelete()}/>
-        <ProductList/>
-      </div>
-    </ProductsContext.Provider>
+    <div className='container'>
+      <Header onDelete={() => massDelete()}/>
+      <ProductList/>
+    </div>
   );
 }
 
