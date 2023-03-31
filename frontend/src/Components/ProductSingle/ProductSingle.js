@@ -1,20 +1,24 @@
 import { useState } from 'react';
 import './ProductSingle.css';
 
-function ProductSingle({ product, type, onSelect }) {
+function ProductSingle({ product, type }) {
   const [selected, setSelected] = useState(false);
 
   function selectProduct() {
-    const checkbox = document.getElementById(product.sku + "check");
+    const checkbox = document.getElementById(product.sku);
     checkbox.checked = true;
-    
+
     setSelected(checkbox.checked);
-    onSelect();
   }
 
   return (
     <div className={ selected ? 'product selected' : 'product' } onClick={() => selectProduct()}>
-      <input className='delete-checkbox form-check-input' type='checkbox' id={product.sku + "check"} onClick={() => false}></input>
+      <input
+        className='delete-checkbox form-check-input'
+        type='checkbox'
+        id={product.sku}
+        onClick={() => false}
+      ></input>
 
       <div className='product-details'>
         <span>{product.sku}</span>
