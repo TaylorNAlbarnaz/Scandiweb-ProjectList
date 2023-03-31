@@ -5,13 +5,16 @@ function ProductSingle({ product, type, onSelect }) {
   const [selected, setSelected] = useState(false);
 
   function selectProduct() {
-    setSelected(!selected);
+    const checkbox = document.getElementById(product.sku + "check");
+    checkbox.checked = true;
+    
+    setSelected(checkbox.checked);
     onSelect();
   }
 
   return (
     <div className={ selected ? 'product selected' : 'product' } onClick={() => selectProduct()}>
-      <div className='delete-checkbox'> { selected && 'X'} </div>
+      <input className='delete-checkbox form-check-input' type='checkbox' id={product.sku + "check"} onClick={() => false}></input>
 
       <div className='product-details'>
         <span>{product.sku}</span>

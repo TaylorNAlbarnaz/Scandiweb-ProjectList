@@ -25,7 +25,7 @@ function ProductList() {
     <section className='product-list'>
       {products.map((product)=>{
          return <ProductSingle
-                  key={product.name}
+                  key={product.sku}
                   product={product}
                   type={product.type}
                   onSelect={() => updateProductsToDelete(product)}

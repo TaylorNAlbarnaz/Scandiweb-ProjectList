@@ -1,7 +1,3 @@
-.product * {
-  user-select: none;
-}
-
 .product {
   position: relative;
   margin: 5% auto;
@@ -52,4 +48,7 @@
   border: 2px solid darkgray;
   font-size: 1vw;
   font-weight: bold;
+
+  user-select: none;
+  cursor: pointer;
 }
