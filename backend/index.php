@@ -82,68 +82,88 @@ class API {
 
     function DeleteProduct($sku)
     {
-        $db = new Connection();
+      $db = new Connection();
 
-        // Sets the query data
-        $query = $db->prepare("DELETE FROM products WHERE sku = :sku");
+      // Sets the query data
+      $query = $db->prepare("DELETE FROM products WHERE sku = :sku");
 
-        // Executes the query, deleting the product if it exists
-        $query->execute(array(
-            ':sku' => $sku
-        ));
+      // Executes the query, deleting the product if it exists
+      $query->execute(array(
+        ':sku' => $sku
+      ));
     }
 
     // Treats the json data received by a query from the database and turns it into an array
     function TreatData($query) {
-        $products = array();
-        while ($OutputData = $query->fetch(PDO::FETCH_ASSOC))
-        {
-            $products[] = array(
-                'id'            => $OutputData['id'],
-                'sku'          => $OutputData['sku'],
-                'name'    => $OutputData['name'],
-                'price'           => $OutputData['price'],
-                'size'       => $OutputData['size'],
-                'width'         => $OutputData['width'],
-                'height'      => $OutputData['height'],
-                'length'   => $OutputData['length'],
-                'weight'   => $OutputData['weight']
-            );
-        }
+      $products = array();
+      while ($OutputData = $query->fetch(PDO::FETCH_ASSOC))
+      {
+        $products[] = array(
+          'id'            => $OutputData['id'],
+          'sku'          => $OutputData['sku'],
+          'name'    => $OutputData['name'],
+          'price'           => $OutputData['price'],
+          'size'       => $OutputData['size'],
+          'width'         => $OutputData['width'],
+          'height'      => $OutputData['height'],
+          'length'   => $OutputData['length'],
+          'weight'   => $OutputData['weight']
+        );
+      }
         
-        return $products;
+      return $products;
     }
 }
 
 // Configures all of the API's routes
 $API = new API();
+$json = file_get_contents('php://input');
+$data = json_decode($json);
 
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method == 'GET')
 {
-  echo json_encode($API->GetProducts());
+  try {
+    echo json_encode($API->GetProducts());
+  } catch (Exception $ex) {
+    echo "There was a problem while getting the products from the database. ";
+    echo $ex->getMessage();
+  }
 }
 
 if ($method == 'POST')
 {
-    try {
-        $API->CriarCliente($Requisicao->dados);
-        echo "Product succesfully added!";
-    } catch (Exception $ex) {
-        echo "There was a problem while adding the product. ";
-        echo $ex->getMessage();
-    }
+  try {
+    switch ($data->type) {
+      case 1:
+        $newBook = new Book($data->sku, $data->name, $data->price, $data->weight);
+        $API->AddBook($newBook);
+        break;
+      case 2:
+        $newDVD = new DVD($data->sku, $data->name, $data->price, $data->size);
+        $API->AddDVD($newDVD);
+        break;
+      case 3:
+        $newFurniture = new Furniture($data->sku, $data->name, $data->price, $data->width, $data->height, $data->length);
+        $API->AddFurniture($newFurniture);
+        break;
+      }
+    echo "Product succesfully added!";
+  } catch (Exception $ex) {
+    echo "There was a problem while adding the product to the database. ";
+    echo $ex->getMessage();
+  }
 }
 
 if ($method == 'DELETE')
 {
-    try {
-        $API->DeleteProduct($_REQUEST['sku']);
+  try {
+    $API->DeleteProduct($_REQUEST['sku']);
 
-        echo "Product succesfully deleted!";
-    } catch (Exception $ex) {
-        echo "There was a problem while deleting the product. ";
-        echo $ex->getMessage();
-    }
+    echo "Product succesfully deleted!";
+  } catch (Exception $ex) {
+    echo "There was a problem while deleting the product to the database. ";
+    echo $ex->getMessage();
+  }
 }
 ?>
