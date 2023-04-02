@@ -117,8 +117,6 @@ class API {
 
 // Configures all of the API's routes
 $API = new API();
-$json = file_get_contents('php://input');
-$data = json_decode($json);
 
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method == 'GET')
@@ -133,6 +131,8 @@ if ($method == 'GET')
 
 if ($method == 'POST')
 {
+  $json = file_get_contents('php://input');
+  $data = json_decode($json);
   try {
     switch ($data->type) {
       case 1:
