@@ -1,10 +1,11 @@
 <?php
-require_once __DIR__ . '/src/db.php';
+define("__ROOT__", __DIR__);
+require_once __ROOT__ . '/src/db.php';
 
 // Models
-require_once __DIR__ . '/src/models/book.php';
-require_once __DIR__ . '/src/models/dvd.php';
-require_once __DIR__ . '/src/models/furniture.php';
+require_once __ROOT__ . '/src/models/book.php';
+require_once __ROOT__ . '/src/models/dvd.php';
+require_once __ROOT__ . '/src/models/furniture.php';
 
 // Settings to allow for any type of request
 header("Access-Control-Allow-Origin: *");
@@ -13,6 +14,7 @@ header("Access-Control-Allow-Headers: *");
 header('Content-Type: application/json');
 
 class API {
+    // Gets a list of all products
     function GetProducts() {
         $db = new Connection();
 
@@ -24,62 +26,7 @@ class API {
         return $this->TreatData($query);
     }
 
-    function AddBook($book)
-    {
-      $db = new Connection();
-
-      // Sets the query data
-      $query = $db->prepare("INSERT INTO products (sku, name, price, weight, type)
-                                VALUES (:sku, :name, :price, :weight, :type");
-
-      // Executes the query with it's parameters and creates a DVD in the database
-      $query->execute(array(
-        ':sku' => $book->sku,
-        ':name' => $book->name,
-        ':price' => $book->price,
-        ':weight' => $book->size,
-        ':type' => 1,
-      ));
-    }
-
-    function AddDVD($dvd)
-    {
-      $db = new Connection();
-
-      // Sets the query data
-      $query = $db->prepare("INSERT INTO products (sku, name, price, size, type)
-                                VALUES (:sku, :name, :price, :size, :type");
-
-      // Executes the query with it's parameters and creates a DVD in the database
-      $query->execute(array(
-        ':sku' => $dvd->sku,
-        ':name' => $dvd->name,
-        ':price' => $dvd->price,
-        ':size' => $dvd->size,
-        ':type' => 2,
-      ));
-    }
-
-    function AddFurniture($furniture)
-    {
-      $db = new Connection();
-
-      // Sets the query data
-      $query = $db->prepare("INSERT INTO products (sku, name, price, width, height, length, type)
-                                VALUES (:sku, :name, :price, :width, :height, :length, :type");
-
-      // Executes the query with it's parameters and creates a DVD in the database
-      $query->execute(array(
-        ':sku' => $furniture->sku,
-        ':name' => $furniture->name,
-        ':price' => $furniture->price,
-        ':width' => $furniture->width,
-        ':height' => $furniture->height,
-        ':length' => $furniture->length,
-        ':type' => 2,
-      ));
-    }
-
+    // Delete the product from the database based on it's SKU
     function DeleteProduct($sku)
     {
       $db = new Connection();
@@ -117,8 +64,9 @@ class API {
 
 // Configures all of the API's routes
 $API = new API();
-
 $method = $_SERVER['REQUEST_METHOD'];
+
+// Gets a list of all products in a GET request
 if ($method == 'GET')
 {
   try {
@@ -129,41 +77,44 @@ if ($method == 'GET')
   }
 }
 
+// Adding and Deleting Products in the POST request
 if ($method == 'POST')
 {
   $json = file_get_contents('php://input');
   $data = json_decode($json);
-  try {
-    switch ($data->type) {
-      case 1:
-        $newBook = new Book($data->sku, $data->name, $data->price, $data->weight);
-        $API->AddBook($newBook);
-        break;
-      case 2:
-        $newDVD = new DVD($data->sku, $data->name, $data->price, $data->size);
-        $API->AddDVD($newDVD);
-        break;
-      case 3:
-        $newFurniture = new Furniture($data->sku, $data->name, $data->price, $data->width, $data->height, $data->length);
-        $API->AddFurniture($newFurniture);
-        break;
-      }
-    echo "Product succesfully added!";
-  } catch (Exception $ex) {
-    echo "There was a problem while adding the product to the database. ";
-    echo $ex->getMessage();
-  }
-}
-
-if ($method == 'DELETE')
-{
-  try {
-    $API->DeleteProduct($_REQUEST['sku']);
-
-    echo "Product succesfully deleted!";
-  } catch (Exception $ex) {
-    echo "There was a problem while deleting the product to the database. ";
-    echo $ex->getMessage();
+  
+  if (isset($_REQUEST['sku'])) {
+    // Since 000webhost doesn't allow Delete methods, if a SKU parameter is set in the post act as a DELETE
+    try {
+      $API->DeleteProduct($_REQUEST['sku']);
+  
+      echo "Product succesfully deleted!";
+    } catch (Exception $ex) {
+      echo "There was a problem while deleting the product to the database. ";
+      echo $ex->getMessage();
+    }
+  } else {
+    // If the SKU parameter is not set, then just act as a POST
+    try {
+      $newProduct = null;
+      switch ($data->type) {
+        case 1:
+          $newProduct = new Book($data->sku, $data->name, $data->price, $data->weight);
+          break;
+        case 2:
+          $newProduct = new DVD($data->sku, $data->name, $data->price, $data->size);
+          break;
+        case 3:
+          $newProduct = new Furniture($data->sku, $data->name, $data->price, $data->width, $data->height, $data->length);
+          break;
+        }
+      
+        $newProduct->AddToDatabase();
+      echo "Product succesfully added!";
+    } catch (Exception $ex) {
+      echo "There was a problem while adding the product to the database. ";
+      echo $ex->getMessage();
+    }
   }
 }
 ?>
