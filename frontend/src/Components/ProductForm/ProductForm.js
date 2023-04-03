@@ -51,9 +51,10 @@ function ProductForm() {
         newProduct = new Furniture(pd.sku, pd.name, pd.price, pd.height, pd.width, pd.length);
         break;
     }
-    
+    newProduct.type = type;
+
     // Posts the object and goes back to main page
-    postProduct();
+    postProduct(newProduct);
 
     navigate('/');
   }
@@ -71,19 +72,19 @@ function ProductForm() {
 
     switch (type) {
       case 1:
-        if (!pd.size) {
+        if (!pd.weight) {
           setError(true);
           return false;
         }
         break;
       case 2:
-        if (!pd.height || !pd.width || !pd.length) {
+        if (!pd.size) {
           setError(true);
           return false;
         }
         break;
       case 3:
-        if (!pd.weight) {
+        if (!pd.height || !pd.width || !pd.length) {
           setError(true);
           return false;
         }
@@ -120,14 +121,29 @@ function ProductForm() {
         <label htmlFor='productType' className='col-sm-2 col-form-label'>Type Switcher</label>
         <div className='col-sm-10'>
           <select value={type} onChange={changeProductType} className="form-select mb-3" id="productType">
-            <option value="1">DVD</option>
-            <option value="2">Furniture</option>
-            <option value="3">Book</option>
+            <option value="1">Book</option>
+            <option value="2">DVD</option>
+            <option value="3">Furniture</option>
           </select>
         </div>
       </div>
 
-      {type == 1 && // DVD Inputs
+      {type == 1 && // Book Inputs
+        <>
+          <div className='d-flex justify-content-center'>
+            <span className='description'>Please, provide weight</span>
+          </div>
+
+          <div className='form-group row'>
+            <label htmlFor='weight' className='col-sm-2 col-form-label'>Weight (KG)</label>
+            <div className='col-sm-10'>
+              <input type='number' className='form-control' id='weight'/>
+            </div>
+          </div>
+        </>
+      }
+
+      {type == 2 && // DVD Inputs
         <>
           <div className='d-flex justify-content-center'>
             <span className='description'>Please, provide size</span>
@@ -141,7 +157,7 @@ function ProductForm() {
         </>
       }
 
-      {type == 2 && // Furniture Inputs
+      {type == 3 && // Furniture Inputs
         <>
           <div className='d-flex justify-content-center'>
             <span className='description'>Please, provide dimensions</span>
@@ -170,20 +186,6 @@ function ProductForm() {
         </>
       }
 
-      {type == 3 && // Book Inputs
-        <>
-          <div className='d-flex justify-content-center'>
-            <span className='description'>Please, provide weight</span>
-          </div>
-
-          <div className='form-group row'>
-            <label htmlFor='weight' className='col-sm-2 col-form-label'>Weight (KG)</label>
-            <div className='col-sm-10'>
-              <input type='number' className='form-control' id='weight'/>
-            </div>
-          </div>
-        </>
-      }
       {error &&
         <div className='error'>
           <span className='text-danger'>Please, submit required data</span>

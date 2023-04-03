@@ -14,16 +14,14 @@ export async function getProducts() {
 // Adds a new product to the database
 export async function addProduct(product) {
   try {
-      await fetch(URL, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(product)
-      });
+    console.log(JSON.stringify(product))
+    await fetch(URL, {
+      method: 'POST',
+      headers: new Headers(),
+      body: JSON.stringify(product)
+    });
   } catch (error) {
-      console.error(error);
+    console.error(error);
   }
 }
 
