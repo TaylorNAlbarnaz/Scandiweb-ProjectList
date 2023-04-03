@@ -4,19 +4,19 @@ import { Book, DVD, Furniture } from '../../Models';
 import './ProductForm.css';
 
 import { ProductsContext } from '../../App';
-import { addProduct } from '../../Services/ProductService';
+import { addProduct, getProducts } from '../../Services/ProductService';
 
 function ProductForm() {
-  const [products, setProducts, productsToDelete, setProductsToDelete, setUpdate] = useContext(ProductsContext);
+  const [products, setProducts, productsToDelete, setProductsToDelete] = useContext(ProductsContext);
   const [type, setType] = useState(1);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const changeProductType = (e) => {
     setType(e.target.value);
   };
 
-  function createProduct(e) {
+  async function createProduct(e) {
     e.preventDefault();
 
     let newProduct = null;
@@ -35,7 +35,7 @@ function ProductForm() {
 
     // Gets the current selected type of product and validates the project data input
     const type = parseInt(document.getElementById('productType').value);
-    if (!isProductDataValid(pd, type)) {
+    if (await isProductDataValid(pd, type) == false) {
       return;
     }
 
@@ -54,38 +54,45 @@ function ProductForm() {
     newProduct.type = type;
 
     // Posts the object and goes back to main page
-    postProduct(newProduct);
+    await addProduct(newProduct);
+    const productList = await getProducts();
+    setProducts(productList);
 
     navigate('/');
   }
 
-  async function postProduct(product) {
-    await addProduct(product);
-    setUpdate(true);
-  }
-
-  function isProductDataValid(pd, type) {
+  async function isProductDataValid(pd, type) {
+    // Checks if the basic properties are set
     if (!pd.sku || !pd.name || !pd.price) {
-      setError(true);
+      setError("Please, submit required data");
       return false;
     }
 
+    // Check if the SKU is unique
+    let products = await getProducts();
+    products = products.filter(p => p.sku == pd.sku);
+    if (products.length > 0) {
+      setError("There is already a product with this SKU!");
+      return false;
+    }
+
+    // Check for individual properties for each type
     switch (type) {
       case 1:
         if (!pd.weight) {
-          setError(true);
+          setError("Please, submit required data");
           return false;
         }
         break;
       case 2:
         if (!pd.size) {
-          setError(true);
+          setError("Please, submit required data");
           return false;
         }
         break;
       case 3:
         if (!pd.height || !pd.width || !pd.length) {
-          setError(true);
+          setError("Please, submit required data");
           return false;
         }
         break;
@@ -188,7 +195,7 @@ function ProductForm() {
 
       {error &&
         <div className='error'>
-          <span className='text-danger'>Please, submit required data</span>
+          <span className='text-danger'>{error}</span>
         </div>
       }
     </form>

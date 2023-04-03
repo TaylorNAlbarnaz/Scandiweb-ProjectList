@@ -10,7 +10,6 @@ export const ProductsContext = createContext();
 function App() {
   let [products, setProducts] = useState([]);
   let [productsToDelete, setProductsToDelete] = useState([]);
-  let [update, setUpdate] = useState(false);
 
   async function getDatabaseProducts() {
     const productList = await getProducts();
@@ -21,16 +20,8 @@ function App() {
     getDatabaseProducts();
   }, []);
 
-  useEffect(() => {
-    if (update == true) {
-      console.log("Update");
-      update = false;
-      getDatabaseProducts();
-    }
-  }, [update]);
-
   return (
-    <ProductsContext.Provider value={[products, setProducts, productsToDelete, setProductsToDelete, setUpdate]}>
+    <ProductsContext.Provider value={[products, setProducts, productsToDelete, setProductsToDelete]}>
       <Routes>
           <Route exact path="/" Component={MainPage}/>
           <Route exact path="/add-product" Component={AddProductPage}/>

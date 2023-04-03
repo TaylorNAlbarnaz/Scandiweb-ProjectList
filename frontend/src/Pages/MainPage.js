@@ -5,7 +5,7 @@ import { ProductsContext } from '../App';
 import { getProducts, removeProductBySKU } from '../Services/ProductService';
 
 function MainPage() {
-  let [products, setProducts, productsToDelete, setProductsToDelete, setUpdate] = useContext(ProductsContext);
+  let [products, setProducts, productsToDelete, setProductsToDelete] = useContext(ProductsContext);
 
   async function massDelete() {
     // Get all projects to delete
@@ -24,7 +24,8 @@ function MainPage() {
     }
     
     // Updates the projects list
-    setUpdate(true);
+    const productList = await getProducts();
+    setProducts(productList);
 
     setProductsToDelete([]);
   }
