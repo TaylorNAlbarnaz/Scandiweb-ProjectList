@@ -1,23 +1,31 @@
-import { useState, createContext, useContext } from 'react';
+import { useContext } from 'react';
 import { Header, ProductList} from '../Components';
 
 import { ProductsContext } from '../App';
+import { getProducts, removeProductBySKU } from '../Services/ProductService';
 
 function MainPage() {
-  let [products, setProducts, productsToDelete, setProductsToDelete] = useContext(ProductsContext);
+  let [products, setProducts, productsToDelete, setProductsToDelete, setUpdate] = useContext(ProductsContext);
 
-  function massDelete() {
+  async function massDelete() {
     // Get all projects to delete
     const checkboxes = document.getElementsByClassName('delete-checkbox');
     for (const checkbox of checkboxes) {
       const productSku = checkbox.id;
-      const productToDelete = products.filter(p => p.sku == productSku);
-      productsToDelete.push(productToDelete);
+      if (checkbox.checked) {
+        productsToDelete.push(productSku);
+      }
     }
 
-    // Filters only products that aren't part of productsToDelete
-    products = products.filter(p => productsToDelete.filter(ptd => ptd == p.sku) == []);
-    setProducts(products);
+    // Remove all projects from the database
+    for (const sku of productsToDelete) {
+      console.log(sku);
+      await removeProductBySKU(sku);
+    }
+    
+    // Updates the projects list
+    setUpdate(true);
+
     setProductsToDelete([]);
   }
 

@@ -3,9 +3,9 @@ require_once __ROOT__ . '/src/db.php';
 require_once __DIR__ . '/product.php';
 
 class Book extends Product {
-  public $weight;
+  public int $weight;
 
-  public function __construct(string $sku, string $name, int $price, int $weight)
+  public function __construct(string $sku, string $name, float $price, int $weight)
   {
     $this->sku = $sku;
     $this->name = $name;
@@ -23,11 +23,11 @@ class Book extends Product {
 
       // Executes the query with it's parameters and adds a Book to the database
       $query->execute(array(
-        ':sku' => $this->sku,
-        ':name' => $this->name,
-        ':price' => $this->price,
+        ':sku'    => $this->sku,
+        ':name'   => $this->name,
+        ':price'  => $this->price,
         ':weight' => $this->weight,
-        ':type' => 1,
+        ':type'   => 1,
       ));
     }
 }

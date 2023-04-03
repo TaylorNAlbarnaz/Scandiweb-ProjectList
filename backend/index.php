@@ -46,15 +46,16 @@ class API {
       while ($OutputData = $query->fetch(PDO::FETCH_ASSOC))
       {
         $products[] = array(
-          'id'            => $OutputData['id'],
-          'sku'          => $OutputData['sku'],
-          'name'    => $OutputData['name'],
-          'price'           => $OutputData['price'],
-          'size'       => $OutputData['size'],
-          'width'         => $OutputData['width'],
-          'height'      => $OutputData['height'],
-          'length'   => $OutputData['length'],
-          'weight'   => $OutputData['weight']
+          'id'        => $OutputData['id'],
+          'sku'       => $OutputData['sku'],
+          'name'      => $OutputData['name'],
+          'price'     => $OutputData['price'],
+          'size'      => $OutputData['size'],
+          'width'     => $OutputData['width'],
+          'height'    => $OutputData['height'],
+          'length'    => $OutputData['length'],
+          'weight'    => $OutputData['weight'],
+          'type'      => $OutputData['type']
         );
       }
         

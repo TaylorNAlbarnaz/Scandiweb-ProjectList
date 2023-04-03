@@ -4,9 +4,10 @@ import { Book, DVD, Furniture } from '../../Models';
 import './ProductForm.css';
 
 import { ProductsContext } from '../../App';
+import { addProduct } from '../../Services/ProductService';
 
 function ProductForm() {
-  const [products, setProducts] = useContext(ProductsContext);
+  const [products, setProducts, productsToDelete, setProductsToDelete, setUpdate] = useContext(ProductsContext);
   const [type, setType] = useState(1);
   const [error, setError] = useState(false);
   const navigate = useNavigate();
@@ -15,13 +16,9 @@ function ProductForm() {
     setType(e.target.value);
   };
 
-  function addProduct(e) {
+  function createProduct(e) {
     e.preventDefault();
 
-    createProduct();
-  }
-
-  function createProduct() {
     let newProduct = null;
     setError(false);
 
@@ -45,20 +42,25 @@ function ProductForm() {
     // If data is valid, create an instance of the object
     switch (type) {
       case 1:
-        newProduct = new DVD(pd.sku, pd.name, pd.price, pd.size);
+        newProduct = new Book(pd.sku, pd.name, pd.price, pd.weight);
         break;
       case 2:
-        newProduct = new Furniture(pd.sku, pd.name, pd.price, pd.height, pd.width, pd.length);
+        newProduct = new DVD(pd.sku, pd.name, pd.price, pd.size);
         break;
       case 3:
-        newProduct = new Book(pd.sku, pd.name, pd.price, pd.weight);
+        newProduct = new Furniture(pd.sku, pd.name, pd.price, pd.height, pd.width, pd.length);
         break;
     }
     
     // Posts the object and goes back to main page
-    products.push(newProduct)
-    setProducts(products);
+    postProduct();
+
     navigate('/');
+  }
+
+  async function postProduct(product) {
+    await addProduct(product);
+    setUpdate(true);
   }
 
   function isProductDataValid(pd, type) {
@@ -92,7 +94,7 @@ function ProductForm() {
   }
   
   return (
-    <form id='product_form' onSubmit={addProduct}>
+    <form id='product_form' onSubmit={createProduct}>
       <div className='form-group row'>
         <label htmlFor='sku' className='col-sm-2 col-form-label'>SKU</label>
         <div className='col-sm-10'>
